@@ -1,0 +1,32 @@
+html { overflow-y: scroll; }
+body { 
+  background: #eee url('https://i.imgur.com/eeQeRmk.png'); /* https://subtlepatterns.com/weave/ */
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 62.5%;
+  line-height: 1;
+  color: #585858;
+  padding: 22px 10px;
+}
+
+#title-caption { 
+    font-family: 'Amarante', Tahoma, sans-serif;
+    font-weight: bold;
+    font-size: 3.6em;
+    line-height: 1.7em;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+#tablediv {
+    background: #fff;
+}  
+
+td
+{
+    border: 1px solid #000000
+}
+
+th
+{
+    border: 1px solid #000000;
+}

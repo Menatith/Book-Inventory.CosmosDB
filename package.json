@@ -1,0 +1,22 @@
+{
+  "name": "book-inventory",
+  "version": "1.1.0",
+  "description": "An inventory of Marjolein's books, physical and digital. ",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://HenkBVCasus@dev.azure.com/HenkBVCasus/Book%20Inventory/_git/Book%20Inventory"
+  },
+  "keywords": [
+    "books"
+  ],
+  "author": "Marjolein Bente",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "tablefilter": "^0.7.2"
+  }
+}
