@@ -15,41 +15,28 @@ const data = (() => {
 
     return {
         // Retrieve data from API
-        // Work out what the promise and the resolve exactly are doing, because you have .then and a resolve 
-        getAll: () => {
+        // Add a catch!
+        getAll: async () => {
             console.log('getall');
             
-            return new Promise (resolve => {
-                let xhttp;
-                xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        rawData = JSON.parse(this.responseText).Documents;
-                        console.log(rawData);
+            const cosmosDbData = await fetch(URL,{method:"POST"})
+            .then((response) => {
+                //console.log("Response")
+                //console.log(response)
+                rawData = response.json();
+                // console.log("rawData")
+                //console.log(rawData);
+                return rawData;
+            })
+            .then((data) => {
+                console.log("data")
+                console.log(data)
+                return data;
+            })
 
-                        // Turn data into array, so can be used by view table functions
-                        allData = rawData.map(doc => Object.values(doc));
-                        console.log(allData);
-
-                        //Removing unwanted properties
-                        console.log('splicing');
-                        for (i = 0; i < allData.length; i++) {
-                            allData[i].splice(17,5);
-                        }
-
-                        // Save data in localStorage
-                        localStorage.setItem("data",JSON.stringify(allData));
-
-                        console.log(allData);
-                        resolve(allData);
-                    } else {
-                        console.log (`${this.status}: ${this.statusText}`);
-                        resolve(null);
-                    }
-                };
-                xhttp.open("POST", "URL", false);
-                xhttp.send();
-            }) 
+            console.log("cosmosDbData");
+            console.log(cosmosDbData);
+            return cosmosDbData;
         },
 
         // Store data from localStorage. If empty, call API. ANd return data
@@ -82,15 +69,18 @@ const data = (() => {
 const view = (() => {
     return {
         createTable: async () => {
-            console.log('create table')
+            console.log('create table');
 
             const fullTable = await data.storeData();
+            console.log("fullTable");
             console.log(fullTable);
 
             const headings = ['Acquired', 'Age Group', 'Author', 'Date', 'First Published', 'Format', 'Genre', 'ISBN/ASIN', 'Length', 'Location', 'New/Used', 'Physical/Digital', 'Pages', 'Publisher','Read', 'Series', 'Title'];
+            console.log("Headings")
             console.log(headings);
 
             const books = fullTable;
+            console.log("books");
             console.log(books);
 
             // start table and add caption
