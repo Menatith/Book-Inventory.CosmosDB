@@ -7,52 +7,52 @@ async function initClient () {
 
 
 // Store localStorage "data" as variable
-let globalData = '';
 
 const data = (() => {
-
+    // Stores data from API response to prevent unecessary API calls
     let allData = '';
 
     return {
         // Retrieve data from API
-        // Work out what the promise and the resolve exactly are doing, because you have .then and a resolve 
-        getAll: () => {
+        // Improve error catching
+        getAll: async () => {
             console.log('getall');
             
-            return new Promise (resolve => {
-                let xhttp;
-                xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function () {
-                    if (this.readyState == 4 && this.status == 200) {
-                        rawData = JSON.parse(this.responseText).Documents;
-                        console.log(rawData);
+            const cosmosDbData = await fetch(URL,{method:"POST"})
+            .then((response) => {
+                if (response.ok) {
+                    //console.log("Response")
+                    //console.log(response)
+                    rawData = response.json();
+                    // console.log("rawData")
+                    //console.log(rawData);
+                    return rawData;
+                } else {
+                    throw new Error (`Something went wrong with the request.`);
+                }
+            })
+            .then((data) => {
+                console.log("data")
+                console.log(data)
 
-                        // Turn data into array, so can be used by view table functions
-                        allData = rawData.map(doc => Object.values(doc));
-                        console.log(allData);
+                // Save data in localStorage and allData variable
+                localStorage.setItem("data",JSON.stringify(data));
+                allData = data;
+                console.log("AllData");
+                console.log(allData);
+                
+                return data;
+            })
+            .catch((error) => {
+                console.log(error);
+            })
 
-                        //Removing unwanted properties
-                        console.log('splicing');
-                        for (i = 0; i < allData.length; i++) {
-                            allData[i].splice(17,5);
-                        }
-
-                        // Save data in localStorage
-                        localStorage.setItem("data",JSON.stringify(allData));
-
-                        console.log(allData);
-                        resolve(allData);
-                    } else {
-                        console.log (`${this.status}: ${this.statusText}`);
-                        resolve(null);
-                    }
-                };
-                xhttp.open("POST", "URL", false);
-                xhttp.send();
-            }) 
+            console.log("cosmosDbData");
+            console.log(cosmosDbData);
+            return cosmosDbData;
         },
 
-        // Store data from localStorage. If empty, call API. ANd return data
+        // Store data from localStorage. If empty, call API. Return data
         storeData: async () => {
             console.log('storeData');
             console.log(allData);
@@ -82,46 +82,37 @@ const data = (() => {
 const view = (() => {
     return {
         createTable: async () => {
-            console.log('create table')
+            console.log('create table');
 
-            const fullTable = await data.storeData();
-            console.log(fullTable);
-
-            const headings = ['Acquired', 'Age Group', 'Author', 'Date', 'First Published', 'Format', 'Genre', 'ISBN/ASIN', 'Length', 'Location', 'New/Used', 'Physical/Digital', 'Pages', 'Publisher','Read', 'Series', 'Title'];
-            console.log(headings);
-
-            const books = fullTable;
+            let books = await data.storeData();
+            books = books.Documents;
+            console.log("books");
             console.log(books);
+
+            const headings = Object.keys(books[0]).splice(0, 17);
+            console.log("Headings")
+            console.log(headings);
 
             // start table and add caption
             let tablehtml = "<table><caption id=title-caption>Books</caption>";
 
             // insert row of headings
             tablehtml  += "<thead> <tr>";
-            for(let heading of headings)
-            {
-                tablehtml  += `<th>${heading}</th>`;
-            }
+            headings.forEach(heading => tablehtml  += `<th>${heading}</th>`)
             tablehtml += "</tr> </thead>";
 
             // iterate data and add row of cells for each
-            for(let book of books)
-            {
+            books.forEach(book => {
                 tablehtml  += "<tr>";
-        
-                for(i = 0; i < 17; i++)
-                {
-                    if (book[i]) {
-                        tablehtml  += `<td>${book[i]}</td>`;
-                    } else {
-                        tablehtml += '<td></td>'
-                    }
-                }
-        
-                tablehtml  += "</tr>";
-            }
 
-             // end of table
+                headings.forEach(heading => {
+                    tablehtml  += `<td>${book[heading]}</td>`
+                });
+
+                tablehtml  += "</tr>";
+            });
+
+            // end of table
             tablehtml += "</table>";
 
             // add table to the empty div
