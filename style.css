@@ -8,6 +8,15 @@ body {
   padding: 22px 10px;
 }
 
+h2 {
+  text-align: center;
+}
+
+#main-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 #title-caption { 
     font-family: 'Amarante', Tahoma, sans-serif;
     font-weight: bold;
@@ -19,7 +28,12 @@ body {
 
 #tablediv {
     background: #fff;
+    max-width: 66%;
 }  
+
+#author-section {
+  width: 30%;
+}
 
 td
 {
