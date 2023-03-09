@@ -3,7 +3,7 @@ async function initClient () {
     //await data.storeData();
     await view.createTable();
     view.createFilter();
-    authors.countTopAuthors();
+    authors.displayTopAuthors();
 }
 
 
@@ -185,6 +185,20 @@ const authors = (() => {
             console.log(topTenAuthors);
 
             return topTenAuthors
+        },
+
+        displayTopAuthors: async () => {
+            const topTenAuthors = await authors.countTopAuthors();
+            let list = "<ol id=\"author-list\"> ";
+
+            // Place top authors in ordered list
+            topTenAuthors.forEach(author => {
+                list += `<li>${author.author}: ${author.count}</li>`
+            })
+            list += "</ol>"
+
+            // Add list of authors with most books to author-body div 
+            document.getElementById("author-body").innerHTML = list;
         }
     }
 })();
