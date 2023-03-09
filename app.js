@@ -126,7 +126,7 @@ const view = (() => {
                 base_path: 'node_modules/tablefilter/dist/tablefilter/',
                 col_4: 'select',
                 col_6: 'select',
-                col_16: 'select',
+                col_15: 'select',
                 highlight_keywords: true,
                 rows_counter: true,
                 col_types: [
