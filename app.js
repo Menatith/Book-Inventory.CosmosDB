@@ -3,6 +3,7 @@ async function initClient () {
     //await data.storeData();
     await view.createTable();
     view.createFilter();
+    authors.countTopAuthors();
 }
 
 
@@ -32,14 +33,14 @@ const data = (() => {
                 }
             })
             .then((data) => {
-                console.log("data")
-                console.log(data)
+                //console.log("data")
+                //console.log(data)
 
                 // Save data in localStorage and allData variable
                 localStorage.setItem("data",JSON.stringify(data));
                 allData = data;
-                console.log("AllData");
-                console.log(allData);
+                //console.log("AllData");
+                //console.log(allData);
                 
                 return data.Documents;
             })
@@ -47,15 +48,15 @@ const data = (() => {
                 console.log(error);
             })
 
-            console.log("cosmosDbData");
-            console.log(cosmosDbData);
+            //console.log("cosmosDbData");
+            //console.log(cosmosDbData);
             return cosmosDbData;
         },
 
         // Store data from localStorage. If empty, call API. Return data
         storeData: async () => {
             console.log('storeData');
-            console.log(allData);
+            //console.log(allData);
             if (allData !== '' && allData !== null) {
                 console.log('return from variable')
                 return allData;
@@ -85,12 +86,12 @@ const view = (() => {
             console.log('create table');
 
             let books = await data.storeData();
-            console.log("books");
-            console.log(books);
+            //console.log("books");
+            //console.log(books);
 
             const headings = Object.keys(books[0]).splice(0, 17);
-            console.log("Headings")
-            console.log(headings);
+            //console.log("Headings")
+            //console.log(headings);
 
             // start table and add caption
             let tablehtml = "<table><caption id=title-caption>Books</caption>";
@@ -140,6 +141,50 @@ const view = (() => {
         
             var tf = new TableFilter('tablediv', filtersConfig);
             tf.init();  
+        }
+    }
+})();
+
+// Is this approach leaky?
+const authors = (() => {
+    return {
+        count: (books, author) => {
+            console.log("count")
+            //console.log(author)
+            return books.filter((currentBook) => currentBook.author == author).length;
+        },
+
+        countTopAuthors: async () => {
+            console.log("countTopAuthors");
+            let topAuthors = [];
+            const books = await data.storeData();
+            let authorList = [];
+
+            books.forEach(book => {
+                authorList.push(book.author);
+            });
+            
+            const uniqueAuthors = new Set(authorList);
+            //console.log("uniqueAuthors");
+            //console.log(uniqueAuthors);
+
+            uniqueAuthors.forEach (author => {
+                //console.log("CountTopAuthors for loop");
+                //console.log(`${author}`);
+                let authorCount = authors.count(books, author);
+                //console.log(`Author: ${author}, count: ${authorCount}`)
+                topAuthors.push({author: `${author}`, count: authorCount});
+            })
+
+            topAuthors.sort((a,b) => {return a.count - b.count});
+            //console.log ("TopAuthors");
+            //console.log(topAuthors);
+
+            const topTenAuthors = topAuthors.slice(-10).reverse();
+            console.log("Top ten authors")
+            console.log(topTenAuthors);
+
+            return topTenAuthors
         }
     }
 })();
