@@ -7,7 +7,6 @@ async function initClient () {
 
 
 // Store localStorage "data" as variable
-let globalData = '';
 
 const data = (() => {
 
@@ -15,23 +14,30 @@ const data = (() => {
 
     return {
         // Retrieve data from API
-        // Add a catch!
+        // Improve error catching
         getAll: async () => {
             console.log('getall');
             
             const cosmosDbData = await fetch(URL,{method:"POST"})
             .then((response) => {
-                //console.log("Response")
-                //console.log(response)
-                rawData = response.json();
-                // console.log("rawData")
-                //console.log(rawData);
-                return rawData;
+                if (response.ok) {
+                    //console.log("Response")
+                    //console.log(response)
+                    rawData = response.json();
+                    // console.log("rawData")
+                    //console.log(rawData);
+                    return rawData;
+                } else {
+                    throw new Error (`Something went wrong with the request.`);
+                }
             })
             .then((data) => {
                 console.log("data")
                 console.log(data)
                 return data;
+            })
+            .catch((error) => {
+                console.log(error);
             })
 
             console.log("cosmosDbData");
@@ -39,7 +45,7 @@ const data = (() => {
             return cosmosDbData;
         },
 
-        // Store data from localStorage. If empty, call API. ANd return data
+        // Store data from localStorage. If empty, call API. Return data
         storeData: async () => {
             console.log('storeData');
             console.log(allData);
