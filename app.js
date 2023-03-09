@@ -41,7 +41,7 @@ const data = (() => {
                 console.log("AllData");
                 console.log(allData);
                 
-                return data;
+                return data.Documents;
             })
             .catch((error) => {
                 console.log(error);
@@ -85,7 +85,6 @@ const view = (() => {
             console.log('create table');
 
             let books = await data.storeData();
-            books = books.Documents;
             console.log("books");
             console.log(books);
 
