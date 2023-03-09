@@ -9,7 +9,7 @@ async function initClient () {
 // Store localStorage "data" as variable
 
 const data = (() => {
-
+    // Stores data from API response to prevent unecessary API calls
     let allData = '';
 
     return {
@@ -34,6 +34,13 @@ const data = (() => {
             .then((data) => {
                 console.log("data")
                 console.log(data)
+                
+                // Save data in localStorage and allData variable
+                localStorage.setItem("data",JSON.stringify(data));
+                allData = data;
+                console.log("AllData");
+                console.log(allData);
+                
                 return data;
             })
             .catch((error) => {
