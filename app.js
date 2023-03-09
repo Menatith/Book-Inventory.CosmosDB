@@ -34,7 +34,7 @@ const data = (() => {
             .then((data) => {
                 console.log("data")
                 console.log(data)
-                
+
                 // Save data in localStorage and allData variable
                 localStorage.setItem("data",JSON.stringify(data));
                 allData = data;
@@ -84,47 +84,35 @@ const view = (() => {
         createTable: async () => {
             console.log('create table');
 
-            const fullTable = await data.storeData();
-            console.log("fullTable");
-            console.log(fullTable);
-
-            const headings = ['Acquired', 'Age Group', 'Author', 'Date', 'First Published', 'Format', 'Genre', 'ISBN/ASIN', 'Length', 'Location', 'New/Used', 'Physical/Digital', 'Pages', 'Publisher','Read', 'Series', 'Title'];
-            console.log("Headings")
-            console.log(headings);
-
-            const books = fullTable;
+            let books = await data.storeData();
+            books = books.Documents;
             console.log("books");
             console.log(books);
+
+            const headings = Object.keys(books[0]).splice(0, 17);
+            console.log("Headings")
+            console.log(headings);
 
             // start table and add caption
             let tablehtml = "<table><caption id=title-caption>Books</caption>";
 
             // insert row of headings
             tablehtml  += "<thead> <tr>";
-            for(let heading of headings)
-            {
-                tablehtml  += `<th>${heading}</th>`;
-            }
+            headings.forEach(heading => tablehtml  += `<th>${heading}</th>`)
             tablehtml += "</tr> </thead>";
 
             // iterate data and add row of cells for each
-            for(let book of books)
-            {
+            books.forEach(book => {
                 tablehtml  += "<tr>";
-        
-                for(i = 0; i < 17; i++)
-                {
-                    if (book[i]) {
-                        tablehtml  += `<td>${book[i]}</td>`;
-                    } else {
-                        tablehtml += '<td></td>'
-                    }
-                }
-        
-                tablehtml  += "</tr>";
-            }
 
-             // end of table
+                headings.forEach(heading => {
+                    tablehtml  += `<td>${book[heading]}</td>`
+                });
+
+                tablehtml  += "</tr>";
+            });
+
+            // end of table
             tablehtml += "</table>";
 
             // add table to the empty div
