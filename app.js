@@ -148,12 +148,14 @@ const view = (() => {
 // Is this approach leaky?
 const authors = (() => {
     return {
+        // Count how many books are listed by the passed author
         count: (books, author) => {
             console.log("count")
             //console.log(author)
             return books.filter((currentBook) => currentBook.author == author).length;
         },
 
+        // Return the ten authors with the most books listed by them
         countTopAuthors: async () => {
             console.log("countTopAuthors");
             let topAuthors = [];
@@ -187,6 +189,7 @@ const authors = (() => {
             return topTenAuthors
         },
 
+        // Display the ten authors with the most books on the page in div author-body
         displayTopAuthors: async () => {
             const topTenAuthors = await authors.countTopAuthors();
             let listAuthor = "<ol id=\"author-list\"> ";
