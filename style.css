@@ -18,6 +18,7 @@ h2 {
   justify-content: space-between;
 }
 
+/** Table **/
 #title-caption { 
   color: #fff;
   font-family: 'Amarante', Tahoma, sans-serif;
@@ -31,7 +32,30 @@ h2 {
 #tablediv {
     background: #fff;
     max-width: 66%;
-}  
+}
+
+td
+{
+    border: 1px solid #000000
+}
+
+th
+{
+    border: 1px solid #000000;
+}
+
+/** Top Author section **/
+.top-author {
+  border: none;
+  background: none;
+  font-family: 'Amarante', Tahoma, sans-serif;
+  font-size: large;
+}
+
+.top-author:hover {
+  font-size: 120%;
+  transition-duration: 0.4s;
+}
 
 #author-section {
   width: 30%;
@@ -43,16 +67,17 @@ h2 {
 #author-body {
   margin-left: auto;
   margin-right: auto;
-  width: 250px;
+  padding: 0px 70px;
   font-size: large;
   display: grid;
   grid-template-areas: 
-    "author-list  count-list";
+    "author-list count-list";
   line-height: 1.7em;
 }
 
 #author-list {
   grid-area: author-list;
+  min-width: 200px;
 }
 
 #count-list {
@@ -60,12 +85,7 @@ h2 {
   grid-area: count-list;
 }
 
-td
-{
-    border: 1px solid #000000
-}
-
-th
-{
-    border: 1px solid #000000;
+/** Buttons **/
+button:hover {
+  cursor: pointer;
 }

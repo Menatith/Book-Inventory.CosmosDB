@@ -212,7 +212,7 @@ const authors = (() => {
 
             // Place top authors in ordered list
             topTenAuthors.forEach(author => {
-                listAuthor.innerHTML += `<li class=top-author>${author.author}</li>`
+                listAuthor.innerHTML += `<li> <button type=button class=top-author>${author.author}</button></li>`
                 listCount.innerHTML += `<li>${author.count}</li>`
             })
 
