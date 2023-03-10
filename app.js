@@ -3,7 +3,8 @@ async function initClient () {
     //await data.storeData();
     await view.createTable();
     view.createFilter();
-    authors.displayTopAuthors();
+    await authors.displayTopAuthors();
+    authors.filterByAuthor();
 }
 
 
@@ -81,6 +82,8 @@ const data = (() => {
 
 // Create table filled with data from the sheet
 const view = (() => {
+    let tf;
+
     return {
         createTable: async () => {
             console.log('create table');
@@ -139,8 +142,18 @@ const view = (() => {
                 ]
             };
         
-            var tf = new TableFilter('tablediv', filtersConfig);
+            tf = new TableFilter('tablediv', filtersConfig);
             tf.init();  
+        },
+
+        filterActivate: (index, value) => {
+            console.log("filterActive");
+            tf.clearFilters();
+            tf.activateFilter(index);
+    
+            // act
+            tf.setFilterValue(index, value);
+            tf.filter();
         }
     }
 })();
@@ -192,20 +205,30 @@ const authors = (() => {
         // Display the ten authors with the most books on the page in div author-body
         displayTopAuthors: async () => {
             const topTenAuthors = await authors.countTopAuthors();
-            let listAuthor = "<ol id=\"author-list\"> ";
+            let listAuthor = document.createElement("ol");
+            listAuthor.setAttribute("id", "author-list");
             let listCount = document.createElement("ol");
             listCount.setAttribute("id", "count-list");
 
             // Place top authors in ordered list
             topTenAuthors.forEach(author => {
-                listAuthor += `<li>${author.author}</li>`
+                listAuthor.innerHTML += `<li class=top-author>${author.author}</li>`
                 listCount.innerHTML += `<li>${author.count}</li>`
             })
-            listAuthor += "</ol>"
 
             // Add list of authors with most books to author-body div 
-            document.getElementById("author-body").innerHTML = listAuthor;
+            document.getElementById("author-body").appendChild(listAuthor);
             document.getElementById("author-body").appendChild(listCount);
+        },
+
+        // Adjust tablefilter to only show books by author clicked from top ten list
+        filterByAuthor: () => {
+            console.log("filterByAuthor")
+            document.querySelectorAll(".top-author").forEach(item => {
+                item.addEventListener('click', function(){ 
+                    view.filterActivate(2, item.textContent);
+                })
+            })
         }
     }
 })();
