@@ -42,6 +42,18 @@ h2 {
   margin-right: auto;
   width: 250px;
   font-size: large;
+  display: grid;
+  grid-template-areas: 
+    "author-list  count-list";
+}
+
+#author-list {
+  grid-area: author-list;
+}
+
+#count-list {
+  list-style-type: none;
+  grid-area: count-list;
 }
 
 td
