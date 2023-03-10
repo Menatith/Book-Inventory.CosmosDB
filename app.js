@@ -189,16 +189,20 @@ const authors = (() => {
 
         displayTopAuthors: async () => {
             const topTenAuthors = await authors.countTopAuthors();
-            let list = "<ol id=\"author-list\"> ";
+            let listAuthor = "<ol id=\"author-list\"> ";
+            let listCount = document.createElement("ol");
+            listCount.setAttribute("id", "count-list");
 
             // Place top authors in ordered list
             topTenAuthors.forEach(author => {
-                list += `<li>${author.author}: ${author.count}</li>`
+                listAuthor += `<li>${author.author}</li>`
+                listCount.innerHTML += `<li>${author.count}</li>`
             })
-            list += "</ol>"
+            listAuthor += "</ol>"
 
             // Add list of authors with most books to author-body div 
-            document.getElementById("author-body").innerHTML = list;
+            document.getElementById("author-body").innerHTML = listAuthor;
+            document.getElementById("author-body").appendChild(listCount);
         }
     }
 })();
