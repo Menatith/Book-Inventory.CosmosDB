@@ -1,7 +1,7 @@
 html { overflow-y: scroll; }
 body { 
-  background: #eee url('https://i.imgur.com/eeQeRmk.png'); /* https://subtlepatterns.com/weave/ */
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #585858 url('https://www.toptal.com/designers/subtlepatterns/uploads/escheresque_ste.png'); /* https://subtlepatterns.com/escheresque-dark/ */
+  font-family: 'Amarante', Tahoma, sans-serif;
   font-size: 62.5%;
   line-height: 1;
   color: #585858;
@@ -10,6 +10,7 @@ body {
 
 h2 {
   text-align: center;
+  padding: 20px;
 }
 
 #main-container {
@@ -18,13 +19,14 @@ h2 {
 }
 
 #title-caption { 
-    font-family: 'Amarante', Tahoma, sans-serif;
-    font-weight: bold;
-    font-size: 3.6em;
-    line-height: 1.7em;
-    margin-bottom: 10px;
-    text-align: center;
-  }
+  color: #fff;
+  font-family: 'Amarante', Tahoma, sans-serif;
+  font-weight: bold;
+  font-size: 3.6em;
+  line-height: 1.7em;
+  margin-bottom: 10px;
+  text-align: center;
+}
 
 #tablediv {
     background: #fff;
@@ -35,6 +37,7 @@ h2 {
   width: 30%;
   background-color: #fff;
   max-height: 500px;
+  border-radius: 5%;
 }
 
 #author-body {
@@ -45,6 +48,7 @@ h2 {
   display: grid;
   grid-template-areas: 
     "author-list  count-list";
+  line-height: 1.7em;
 }
 
 #author-list {
