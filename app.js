@@ -3,6 +3,8 @@ async function initClient () {
     //await data.storeData();
     await view.createTable();
     view.createFilter();
+    await authors.displayTopAuthors();
+    authors.filterByAuthor();
 }
 
 
@@ -32,30 +34,30 @@ const data = (() => {
                 }
             })
             .then((data) => {
-                console.log("data")
-                console.log(data)
+                //console.log("data")
+                //console.log(data)
 
                 // Save data in localStorage and allData variable
                 localStorage.setItem("data",JSON.stringify(data));
                 allData = data;
-                console.log("AllData");
-                console.log(allData);
+                //console.log("AllData");
+                //console.log(allData);
                 
-                return data;
+                return data.Documents;
             })
             .catch((error) => {
                 console.log(error);
             })
 
-            console.log("cosmosDbData");
-            console.log(cosmosDbData);
+            //console.log("cosmosDbData");
+            //console.log(cosmosDbData);
             return cosmosDbData;
         },
 
         // Store data from localStorage. If empty, call API. Return data
         storeData: async () => {
             console.log('storeData');
-            console.log(allData);
+            //console.log(allData);
             if (allData !== '' && allData !== null) {
                 console.log('return from variable')
                 return allData;
@@ -80,18 +82,19 @@ const data = (() => {
 
 // Create table filled with data from the sheet
 const view = (() => {
+    let tf;
+
     return {
         createTable: async () => {
             console.log('create table');
 
             let books = await data.storeData();
-            books = books.Documents;
-            console.log("books");
-            console.log(books);
+            //console.log("books");
+            //console.log(books);
 
             const headings = Object.keys(books[0]).splice(0, 17);
-            console.log("Headings")
-            console.log(headings);
+            //console.log("Headings")
+            //console.log(headings);
 
             // start table and add caption
             let tablehtml = "<table><caption id=title-caption>Books</caption>";
@@ -126,6 +129,7 @@ const view = (() => {
                 base_path: 'node_modules/tablefilter/dist/tablefilter/',
                 col_4: 'select',
                 col_6: 'select',
+                col_16: 'select',
                 highlight_keywords: true,
                 rows_counter: true,
                 col_types: [
@@ -138,8 +142,93 @@ const view = (() => {
                 ]
             };
         
-            var tf = new TableFilter('tablediv', filtersConfig);
+            tf = new TableFilter('tablediv', filtersConfig);
             tf.init();  
+        },
+
+        filterActivate: (index, value) => {
+            console.log("filterActive");
+            tf.clearFilters();
+            tf.activateFilter(index);
+    
+            // act
+            tf.setFilterValue(index, value);
+            tf.filter();
+        }
+    }
+})();
+
+// Is this approach leaky?
+const authors = (() => {
+    return {
+        // Count how many books are listed by the passed author
+        count: (books, author) => {
+            console.log("count")
+            //console.log(author)
+            return books.filter((currentBook) => currentBook.author == author).length;
+        },
+
+        // Return the ten authors with the most books listed by them
+        countTopAuthors: async () => {
+            console.log("countTopAuthors");
+            let topAuthors = [];
+            const books = await data.storeData();
+            let authorList = [];
+
+            books.forEach(book => {
+                authorList.push(book.author);
+            });
+            
+            const uniqueAuthors = new Set(authorList);
+            //console.log("uniqueAuthors");
+            //console.log(uniqueAuthors);
+
+            uniqueAuthors.forEach (author => {
+                //console.log("CountTopAuthors for loop");
+                //console.log(`${author}`);
+                let authorCount = authors.count(books, author);
+                //console.log(`Author: ${author}, count: ${authorCount}`)
+                topAuthors.push({author: `${author}`, count: authorCount});
+            })
+
+            topAuthors.sort((a,b) => {return a.count - b.count});
+            //console.log ("TopAuthors");
+            //console.log(topAuthors);
+
+            const topTenAuthors = topAuthors.slice(-10).reverse();
+            console.log("Top ten authors")
+            console.log(topTenAuthors);
+
+            return topTenAuthors
+        },
+
+        // Display the ten authors with the most books on the page in div author-body
+        displayTopAuthors: async () => {
+            const topTenAuthors = await authors.countTopAuthors();
+            let listAuthor = document.createElement("ol");
+            listAuthor.setAttribute("id", "author-list");
+            let listCount = document.createElement("ol");
+            listCount.setAttribute("id", "count-list");
+
+            // Place top authors in ordered list
+            topTenAuthors.forEach(author => {
+                listAuthor.innerHTML += `<li> <button type=button class=top-author>${author.author}</button></li>`
+                listCount.innerHTML += `<li>${author.count}</li>`
+            })
+
+            // Add list of authors with most books to author-body div 
+            document.getElementById("author-body").appendChild(listAuthor);
+            document.getElementById("author-body").appendChild(listCount);
+        },
+
+        // Adjust tablefilter to only show books by author clicked from top ten list
+        filterByAuthor: () => {
+            console.log("filterByAuthor")
+            document.querySelectorAll(".top-author").forEach(item => {
+                item.addEventListener('click', function(){ 
+                    view.filterActivate(2, item.textContent);
+                })
+            })
         }
     }
 })();
