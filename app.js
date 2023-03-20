@@ -3,8 +3,9 @@ async function initClient () {
     //await data.storeData();
     await view.createTable();
     view.createFilter();
-    await authors.displayTopAuthors();
-    authors.filterByAuthor();
+    await bookAttributes.displayTopAttributeInstances("author", -10);
+    await bookAttributes.displayTopAttributeInstances("genre", -5);
+    bookAttributes.filterByAuthor();
 }
 
 
@@ -159,66 +160,71 @@ const view = (() => {
 })();
 
 // Is this approach leaky?
-const authors = (() => {
+const bookAttributes = (() => {
     return {
-        // Count how many books are listed by the passed author
-        count: (books, author) => {
-            console.log("count")
-            //console.log(author)
-            return books.filter((currentBook) => currentBook.author == author).length;
+        // Count how many books are listed by the passed attribute(genre/author)
+        count: (books, attribute, name) => {
+            //console.log("count")
+            //console.log(name)
+            return books.filter((currentBook) => currentBook[attribute] == name).length;
         },
 
-        // Return the ten authors with the most books listed by them
-        countTopAuthors: async () => {
-            console.log("countTopAuthors");
-            let topAuthors = [];
+        // Return the ten instances of an attribute with the most books listed by them
+        countTopAttributeInstances: async (attribute, amount) => {
+            console.log("countTopAttributeInstances");
+            console.log(attribute);
+            let topAttributeInstances = [];
             const books = await data.storeData();
-            let authorList = [];
+            let attributeInstancesList = [];
 
             books.forEach(book => {
-                authorList.push(book.author);
+                attributeInstancesList.push(book[attribute]);
             });
             
-            const uniqueAuthors = new Set(authorList);
-            //console.log("uniqueAuthors");
-            //console.log(uniqueAuthors);
+            const uniqueAttributeInstances = new Set(attributeInstancesList);
+            console.log("uniqueAttributeInstances");
+            console.log(uniqueAttributeInstances);
 
-            uniqueAuthors.forEach (author => {
-                //console.log("CountTopAuthors for loop");
-                //console.log(`${author}`);
-                let authorCount = authors.count(books, author);
-                //console.log(`Author: ${author}, count: ${authorCount}`)
-                topAuthors.push({author: `${author}`, count: authorCount});
+            uniqueAttributeInstances.forEach (name => {
+                //console.log("CountTopAttributeInstances for loop");
+                //console.log(attribute);
+                let attributeInstanceCount = bookAttributes.count(books, attribute, name);
+                //console.log(`Attribute: ${attribute}, count: ${attributeInstanceCount}`)
+                topAttributeInstances.push({attribute: `${name}`, count: attributeInstanceCount});
             })
 
-            topAuthors.sort((a,b) => {return a.count - b.count});
-            //console.log ("TopAuthors");
-            //console.log(topAuthors);
+            topAttributeInstances.sort((a,b) => {return a.count - b.count});
+            //console.log ("TopAttributeInstances");
+            //console.log(topAttributeInstances);
 
-            const topTenAuthors = topAuthors.slice(-10).reverse();
-            console.log("Top ten authors")
-            console.log(topTenAuthors);
+            const topAmountAttributeInstances = topAttributeInstances.slice(amount).reverse();
+            console.log("Top instances attribute")
+            console.log(topAmountAttributeInstances);
 
-            return topTenAuthors
+            return topAmountAttributeInstances
         },
 
-        // Display the ten authors with the most books on the page in div author-body
-        displayTopAuthors: async () => {
-            const topTenAuthors = await authors.countTopAuthors();
-            let listAuthor = document.createElement("ol");
-            listAuthor.setAttribute("id", "author-list");
+        // Display the attribute instances with the most books on the page in div attribute-body
+        displayTopAttributeInstances: async (attribute, amount) => {
+            console.log("displayTopAttributeInstances")
+            console.log(attribute)
+            const topAmountAttributeInstances = await bookAttributes.countTopAttributeInstances(attribute, amount);
+            let listAttributeInstances = document.createElement("ol");
+            listAttributeInstances.setAttribute("id", `${attribute}-list`);
             let listCount = document.createElement("ol");
-            listCount.setAttribute("id", "count-list");
+            listCount.setAttribute("class", "count-list");
 
-            // Place top authors in ordered list
-            topTenAuthors.forEach(author => {
-                listAuthor.innerHTML += `<li> <button type=button class=top-author>${author.author}</button></li>`
-                listCount.innerHTML += `<li>${author.count}</li>`
+            // Place top attribute instances ordered list
+            console.log("topAmountAttributeInstances");
+            console.log(topAmountAttributeInstances);
+            topAmountAttributeInstances.forEach(name => {
+                listAttributeInstances.innerHTML += `<li> <button type=button class=top-${attribute}>${name.attribute}</button></li>`
+                listCount.innerHTML += `<li>${name.count}</li>`
             })
 
             // Add list of authors with most books to author-body div 
-            document.getElementById("author-body").appendChild(listAuthor);
-            document.getElementById("author-body").appendChild(listCount);
+            document.getElementById(`${attribute}-body`).appendChild(listAttributeInstances);
+            document.getElementById(`${attribute}-body`).appendChild(listCount);
         },
 
         // Adjust tablefilter to only show books by author clicked from top ten list

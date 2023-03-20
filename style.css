@@ -80,7 +80,49 @@ th
   min-width: 200px;
 }
 
-#count-list {
+.count-list {
+  list-style-type: none;
+  grid-area: count-list;
+}
+
+/** Genre **/
+/** Fix this to work with author stuff later **/
+.top-genre {
+  border: none;
+  background: none;
+  font-family: 'Amarante', Tahoma, sans-serif;
+  font-size: large;
+}
+
+.top-genre:hover {
+  font-size: 120%;
+  transition-duration: 0.4s;
+}
+
+#genre-section {
+  width: 30%;
+  background-color: #fff;
+  max-height: 500px;
+  border-radius: 5%;
+}
+
+#genre-body {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0px 70px;
+  font-size: large;
+  display: grid;
+  grid-template-areas:
+    "genre-list count-list";
+  line-height: 1.7em;
+}
+
+#genre-list {
+  grid-area: genre-list;
+  min-width: 200px;
+}
+
+.count-list {
   list-style-type: none;
   grid-area: count-list;
 }
