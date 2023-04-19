@@ -18,6 +18,14 @@ h2 {
   justify-content: space-between;
 }
 
+#top-stuff-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 30%;
+  align-content: start;
+  row-gap: 35px;
+}
+
 /** Table **/
 #title-caption { 
   color: #fff;
@@ -58,10 +66,10 @@ th
 }
 
 #author-section {
-  width: 30%;
   background-color: #fff;
   max-height: 500px;
   border-radius: 5%;
+  width: 95%;
 }
 
 #author-body {
@@ -100,10 +108,10 @@ th
 }
 
 #genre-section {
-  width: 30%;
   background-color: #fff;
   max-height: 500px;
   border-radius: 5%;
+  width: 95%;
 }
 
 #genre-body {
