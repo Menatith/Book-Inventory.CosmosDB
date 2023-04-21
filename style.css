@@ -1,25 +1,46 @@
 html { overflow-y: scroll; }
 body { 
-  background: #eee url('https://i.imgur.com/eeQeRmk.png'); /* https://subtlepatterns.com/weave/ */
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #585858 url('https://www.toptal.com/designers/subtlepatterns/uploads/escheresque_ste.png'); /* https://subtlepatterns.com/escheresque-dark/ */
+  font-family: 'Amarante', Tahoma, sans-serif;
   font-size: 62.5%;
   line-height: 1;
   color: #585858;
   padding: 22px 10px;
 }
 
+h2 {
+  text-align: center;
+  padding: 20px;
+}
+
+#main-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+#top-stuff-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 30%;
+  align-content: start;
+  row-gap: 35px;
+}
+
+/** Table **/
 #title-caption { 
-    font-family: 'Amarante', Tahoma, sans-serif;
-    font-weight: bold;
-    font-size: 3.6em;
-    line-height: 1.7em;
-    margin-bottom: 10px;
-    text-align: center;
-  }
+  color: #fff;
+  font-family: 'Amarante', Tahoma, sans-serif;
+  font-weight: bold;
+  font-size: 3.6em;
+  line-height: 1.7em;
+  margin-bottom: 10px;
+  text-align: center;
+}
 
 #tablediv {
     background: #fff;
-}  
+    max-width: 66%;
+}
 
 td
 {
@@ -29,4 +50,92 @@ td
 th
 {
     border: 1px solid #000000;
+}
+
+/** Top Author section **/
+.top-author {
+  border: none;
+  background: none;
+  font-family: 'Amarante', Tahoma, sans-serif;
+  font-size: large;
+}
+
+.top-author:hover {
+  font-size: 120%;
+  transition-duration: 0.4s;
+}
+
+#author-section {
+  background-color: #fff;
+  max-height: 500px;
+  border-radius: 5%;
+  width: 95%;
+}
+
+#author-body {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0px 70px;
+  font-size: large;
+  display: grid;
+  grid-template-areas: 
+    "author-list count-list";
+  line-height: 1.7em;
+}
+
+#author-list {
+  grid-area: author-list;
+  min-width: 200px;
+}
+
+.count-list {
+  list-style-type: none;
+  grid-area: count-list;
+}
+
+/** Genre **/
+/** Fix this to work with author stuff later **/
+.top-genre {
+  border: none;
+  background: none;
+  font-family: 'Amarante', Tahoma, sans-serif;
+  font-size: large;
+}
+
+.top-genre:hover {
+  font-size: 120%;
+  transition-duration: 0.4s;
+}
+
+#genre-section {
+  background-color: #fff;
+  max-height: 500px;
+  border-radius: 5%;
+  width: 95%;
+}
+
+#genre-body {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0px 70px;
+  font-size: large;
+  display: grid;
+  grid-template-areas:
+    "genre-list count-list";
+  line-height: 1.7em;
+}
+
+#genre-list {
+  grid-area: genre-list;
+  min-width: 200px;
+}
+
+.count-list {
+  list-style-type: none;
+  grid-area: count-list;
+}
+
+/** Buttons **/
+button:hover {
+  cursor: pointer;
 }
