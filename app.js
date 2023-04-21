@@ -6,6 +6,7 @@ async function initClient () {
     await bookAttributes.displayTopAttributeInstances("author", -10);
     await bookAttributes.displayTopAttributeInstances("genre", -5);
     bookAttributes.filterByAuthor();
+    bookAttributes.filterByGenre();
 }
 
 
@@ -163,13 +164,14 @@ const view = (() => {
 const bookAttributes = (() => {
     return {
         // Count how many books are listed by the passed attribute(genre/author)
+        // Non-fiction bug, count too low
         count: (books, attribute, name) => {
             //console.log("count")
             //console.log(name)
             return books.filter((currentBook) => currentBook[attribute] == name).length;
         },
 
-        // Return the ten instances of an attribute with the most books listed by them
+        // Return the amount instances of an attribute with the most books listed by them
         countTopAttributeInstances: async (attribute, amount) => {
             console.log("countTopAttributeInstances");
             console.log(attribute);
@@ -233,6 +235,17 @@ const bookAttributes = (() => {
             document.querySelectorAll(".top-author").forEach(item => {
                 item.addEventListener('click', function(){ 
                     view.filterActivate(2, item.textContent);
+                })
+            })
+        },
+
+        // Adjust tablefilter to only show books by genre clicked from top five list
+        // Fiction genre bug
+        filterByGenre: () => {
+            console.log("filterByGenre")
+            document.querySelectorAll(".top-genre").forEach(item => {
+                item.addEventListener('click', function(){ 
+                    view.filterActivate(6, item.textContent);
                 })
             })
         }
