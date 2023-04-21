@@ -94,17 +94,11 @@ const view = (() => {
             //console.log("books");
             //console.log(books);
 
-            const headings = Object.keys(books[0]).splice(0, 17);
-            //console.log("Headings")
-            //console.log(headings);
+            // Collect headings
+            let headings = Object.keys(books[0]).splice(0, 17);
 
             // start table and add caption
             let tablehtml = "<table><caption id=title-caption>Books</caption>";
-
-            // insert row of headings
-            tablehtml  += "<thead> <tr>";
-            headings.forEach(heading => tablehtml  += `<th>${heading}</th>`)
-            tablehtml += "</tr> </thead>";
 
             // iterate data and add row of cells for each
             books.forEach(book => {
@@ -116,6 +110,24 @@ const view = (() => {
 
                 tablehtml  += "</tr>";
             });
+
+            // format headings to be more readable
+            // must be after books because books are collected by original heading
+            for (let i = 0; i < headings.length; i++) {
+                headings[i] = headings[i][0].toUpperCase() + headings[i].substring(1);
+            }
+            const needEdits = ["Age_group","First_published","Id","New_used","P_d"];
+            const newHeadings = ["Age group", "First published","ISBN / ASIN", "New / Used", "Phys / Dig"];
+            for(i=0; i<needEdits.length; i++) {
+                view.replaceHeadings(headings,needEdits[i], newHeadings[i]);
+            }
+            console.log("Headings after")
+            console.log(headings);
+
+            // insert row of headings
+            tablehtml  += "<thead> <tr>";
+            headings.forEach(heading => tablehtml  += `<th>${heading}</th>`)
+            tablehtml += "</tr> </thead>";
 
             // end of table
             tablehtml += "</table>";
@@ -129,9 +141,9 @@ const view = (() => {
             console.log('run table')
             var filtersConfig = {
                 base_path: 'node_modules/tablefilter/dist/tablefilter/',
-                col_4: 'select',
+                col_4: 'checklist',
                 col_6: 'select',
-                col_16: 'select',
+                col_15: 'select',
                 highlight_keywords: true,
                 rows_counter: true,
                 col_types: [
@@ -146,6 +158,14 @@ const view = (() => {
         
             tf = new TableFilter('tablediv', filtersConfig);
             tf.init();  
+        },
+
+
+        replaceHeadings: (headingArray, oldHeading, newHeading) => {
+            console.log("replaceHeadings")
+            //console.log(headingArray);
+            const index = headingArray.indexOf(oldHeading);
+            headingArray[index] = newHeading
         },
 
         filterActivate: (index, value) => {
