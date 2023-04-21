@@ -52,6 +52,10 @@ th
     border: 1px solid #000000;
 }
 
+#chkdiv_4_tablediv {
+  width:80px;
+}
+
 /** Top Author section **/
 .top-author {
   border: none;
@@ -94,7 +98,6 @@ th
 }
 
 /** Genre **/
-/** Fix this to work with author stuff later **/
 .top-genre {
   border: none;
   background: none;
