@@ -141,19 +141,27 @@ const view = (() => {
             console.log('run table')
             var filtersConfig = {
                 base_path: 'node_modules/tablefilter/dist/tablefilter/',
+                col_0: 'select',
+                col_1: 'select',
                 col_4: 'checklist',
+                col_5: 'select',
                 col_6: 'select',
+                col_8: 'select',
+                col_10: 'select',
+                col_11: 'select',
+                col_14:'checklist',
                 col_15: 'select',
                 highlight_keywords: true,
                 rows_counter: true,
                 col_types: [
                     'string', 'string', 'string',
-                    'string', 'string', 'string',
+                    { type: 'date', locale: 'en', format: '{dd}-{MM}-{yyyy}' }, { type: 'date', locale: 'en', format: '{yyyy}' }, 'string',
                     'string', 'string', 'string',
                     'string', 'string', 'string',
                     'string', 'string', 'string',
                     'string', 'string'
-                ]
+                ],
+                sort_filter_options_desc: [4]
             };
         
             tf = new TableFilter('tablediv', filtersConfig);
